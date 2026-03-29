@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hust.classroomreserve.mapper.UserManagementMapper">
+    <select id="usermanagement" parameterType="com.hust.classroomreserve.entity.Users" resultType="com.hust.classroomreserve.entity.Users">
+    SELECT * FROM users
+    <where>
+        <if test="id != null and id != '' 
+                or name != null and name != '' 
+                or classname != null and classname != '' 
+                or email != null and email != ''">
+            (
+            <trim prefixOverrides="OR"> <!-- 自动去除第一个多余的 OR -->
+                <if test="id != null and id != ''">
+                    id LIKE CONCAT('%', #{id}, '%')
+                </if>
+                <if test="name != null and name != ''">
+                    OR name LIKE CONCAT('%', #{name}, '%')
+                </if>
+                <if test="classname != null and classname != ''">
+                    OR classname LIKE CONCAT('%', #{classname}, '%')
+                </if>
+                <if test="email != null and email != ''">
+                    OR email LIKE CONCAT('%', #{email}, '%')
+                </if>
+            </trim>
+            )
+        </if>
+        <!-- 动态添加角色过滤 -->
+        <if test="role != null">
+            AND role = #{role}
+        </if>
+    </where>
+</select>
+    <delete id="deleteusers" parameterType="com.hust.classroomreserve.entity.Users">
+        delete from users where id=#{id}
+    </delete>
+    <update id="editusers" parameterType="com.hust.classroomreserve.entity.Users">
+    update users
+    <set>
+        <if test="name != null">name = #{name},</if>
+        <if test="email != null">email = #{email},</if>
+        <if test="classname != null">classname = #{classname},</if>
+        <if test="role != null">role = #{role}</if>
+    </set>
+    where id = #{id}
+    </update>
+</mapper>

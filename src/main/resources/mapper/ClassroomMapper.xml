@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hust.classroomreserve.mapper.ClassroomMapper">
+
+    <!-- 添加教室 -->
+    <insert id="addBuilding">
+        INSERT INTO buildings (
+            build_name, build_time, build_section, build_state, build_capacity
+        ) VALUES (
+            #{buildName}, #{buildTime}, #{buildSection}, #{buildState}, #{buildCapacity}
+        )
+    </insert>
+
+    <!-- 删除教室 -->
+    <delete id="deleteBuilding">
+        DELETE FROM buildings
+        <where>
+            build_name = #{buildName}
+            <if test="buildTime != null and buildTime != ''">
+                AND build_time = #{buildTime}
+            </if>
+            <if test="buildSection != null and buildSection != ''">
+                AND build_section = #{buildSection}
+            </if>
+        </where>
+    </delete>
+
+    <!-- 更新教室 -->
+    <update id="updateBuilding">
+        UPDATE buildings
+        SET build_time = #{buildTime},
+            build_section = #{buildSection},
+            build_state = #{buildState},
+            build_capacity = #{buildCapacity}
+        WHERE build_name = #{buildName}
+        AND build_time = #{buildTime}
+        AND build_section = #{buildSection}
+    </update>
+
+    <!-- 查询教室列表：按名称和时间去重，只显示名称+状态 -->
+    <select id="list" resultType="com.hust.classroomreserve.entity.Buildings">
+        SELECT 
+            build_name,
+            MAX(build_state) AS build_state,
+            MAX(build_capacity) AS build_capacity,
+            build_time,
+            build_section
+        FROM buildings
+        <where>
+            <if test="buildName != null and buildName != ''">
+                AND build_name LIKE CONCAT('%', #{buildName}, '%')
+            </if>
+            <if test="buildTime != null and buildTime != ''">
+                AND build_time = #{buildTime}
+            </if>
+            <if test="buildSection != null and buildSection != ''">
+                AND build_section = #{buildSection}
+            </if>
+        </where>
+        GROUP BY build_name, build_time, build_section
+    </select>
+
+    <!-- 根据名称查询教室完整信息 -->
+    <select id="findBuildingByName" resultType="com.hust.classroomreserve.entity.Buildings">
+        SELECT * FROM buildings WHERE build_name = #{buildName}
+    </select>
+
+</mapper>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hust.classroomreserve.mapper.BookingMapper">
+    <select id="findbooking" resultType="com.hust.classroomreserve.entity.Booking">
+    SELECT * FROM booking
+    <where>
+        <if test="bkTime != null and bkTime != ''">
+            AND bk_time = #{bkTime}
+        </if>
+        <if test="bkBdState != null and bkBdState != ''">
+            AND bk_bd_state = #{bkBdState}
+        </if>
+    </where>
+    </select>
+    <select id="bookingrecord" resultType="com.hust.classroomreserve.entity.Booking">
+        select * from booking where bk_pson_id=#{bkPsonId} 
+    </select>
+</mapper>

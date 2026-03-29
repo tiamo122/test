@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hust.classroomreserve.mapper.SuperAdminMapper">
+    <insert id="booking" parameterType="com.hust.classroomreserve.entity.Booking">
+        insert into booking(bk_bd_name,bk_bd_section,bk_time,bk_pson_name,bk_reason,bk_pson_id,bk_bd_state,bk_refused_reason,bk_apply_time)
+        values(#{bkBdName},#{bkBdSection},#{bkTime},#{bkPsonName},#{bkReason},#{bkPsonId},'未审核',#{bkRefusedReason},#{bkApplyTime})
+    </insert>
+    <select id="login" parameterType="com.hust.classroomreserve.entity.Users" resultType="com.hust.classroomreserve.entity.Users">
+        select * from users where id=#{id} and password=#{password}
+    </select>
+    <select id="search" parameterType="com.hust.classroomreserve.entity.Booking" resultType="com.hust.classroomreserve.entity.Booking">
+        select * from booking where bk_bd_state=1 and bk_time=#{bkTime}
+
+    </select>
+    <select id="count" resultType="java.lang.Long">
+        select count(*) from booking
+    </select>
+    <select id="list" resultType="com.hust.classroomreserve.entity.Booking">
+        select * from booking 
+        <where>
+            <if test="bkTime!=null">
+                bk_time=#{bkTime}
+            </if>
+        </where>
+        order by bk_time desc
+    </select>
+    <update id="changebdstate" parameterType="com.hust.classroomreserve.entity.Booking">
+        update buildings set build_state=1 where build_name=#{bkBdName} and build_section=#{bkBdSection} and build_time=#{bkTime}  
+    </update>
+    <update id="bookingrecord" parameterType="com.hust.classroomreserve.entity.Booking">
+        update booking set bk_bd_state='已撤销' where bk_pson_id=#{bkPsonId} and bk_time=#{bkTime} and bk_bd_state='未审核' and bk_bd_name=#{bkBdName} and bk_bd_section=#{bkBdSection};
+    </update>
+    <update id="changebdstate0" parameterType="com.hust.classroomreserve.entity.Buildings">
+        update buildings set build_state=0 where build_name=#{bkBdName} and build_section=#{bkBdSection} and build_time=#{bkTime}
+    </update>
+    <update id="bookingconfirm" parameterType="com.hust.classroomreserve.entity.Booking">
+        update booking set bk_bd_state=#{bkBdState}  where bk_pson_id=#{bkPsonId} and bk_time=#{bkTime} and bk_bd_state='未审核' and bk_bd_name=#{bkBdName} and bk_bd_section=#{bkBdSection};
+    </update>
+    <update id="changebdstate1" parameterType="com.hust.classroomreserve.entity.Buildings">
+        update buildings set build_state=2 where build_name=#{bkBdName} and build_section=#{bkBdSection} and build_time=#{bkTime}
+    </update>
+    <update id="refused" parameterType="com.hust.classroomreserve.entity.Booking">
+    update booking set bk_refused_reason=#{bkRefusedReason} where bk_pson_id=#{bkPsonId} and bk_time=#{bkTime} and bk_bd_state='已驳回' and bk_bd_name=#{bkBdName} and bk_bd_section=#{bkBdSection};
+    </update>
+</mapper>

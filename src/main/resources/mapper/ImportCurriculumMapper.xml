@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hust.classroomreserve.mapper.ImportCurriculumMapper">
+    <update id="insertCurriculum" parameterType="com.hust.classroomreserve.entity.Buildings">
+        update buildings set build_state = 1 where build_name = #{buildName} and build_time = #{buildTime} and build_section = #{buildSection}
+    </update>
+</mapper>

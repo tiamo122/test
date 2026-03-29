@@ -1,0 +1,31 @@
+# 服务端口
+server:
+  port: 9990
+# Spring配置
+spring:
+  # 数据库配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    #url: jdbc:mysql://rm-2zeq2vw1s5jyh24f64o.mysql.rds.aliyuncs.com:3306/classroombooking?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    #username: kaiser
+    #password: Aa123456
+    url: jdbc:mysql://localhost:3308/classroombooking?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true&allowMultiQueries=true
+    username: root
+    password: 123456
+logging:
+  level:
+    com.hust.classroomreserve.mapper: debug
+    com.github.pagehelper: TRACE
+  file:
+    name: log/classroomreserve.log
+# PageHelper 配置
+pagehelper:
+  helper-dialect: mysql 
+  params: pageNow=pageNow,pageSize=pageSize
+  reasonable: true 
+  support-methods-arguments: true 
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
